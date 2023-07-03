@@ -1,0 +1,51 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.layout{
+    min-height: 100vh;
+}
+.navbar-collapse{
+        flex-basis: 0%;
+        flex-grow: 0;
+}
+img{
+    width: 10rem;
+}
+.carousel-item{
+    height: 40vh;
+    width: 100wh;
+}
+.carousel-item img{
+    height: 40vh;
+    object-fit: cover;
+}
+.texto-titulo{
+    display: flex;
+    justify-content: center;
+}
+.main-contenedor{
+    justify-content: space-between !important;
+}
+.card{
+    padding: 5px;
+    margin-right: 10px !important;
+    border-radius: 2% !important;
+}
+
+.check-box-fila{
+    height: 20vh;
+}
+
+.footer{
+    margin-top: 5rem;
+}
+.footer img{
+    height: 2rem;
+    width: 2rem;
+}
+.foto-detalle{
+    height: 30rem;
+    width: 30rem;
+}
