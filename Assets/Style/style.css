@@ -10,27 +10,31 @@
         flex-basis: 0%;
         flex-grow: 0;
 }
-img{
-    width: 10rem;
+.logo-ubicacion{
+    height: 2rem;
 }
 .carousel-item{
-    height: 40vh;
+    height: 30vh;
     width: 100wh;
 }
 .carousel-item img{
-    height: 40vh;
+    height: 30vh;
     object-fit: cover;
 }
 .texto-titulo{
     display: flex;
     justify-content: center;
 }
-.main-contenedor{
-    justify-content: space-between !important;
+.ventanita{
+    width: 30vw;
 }
+
 .card{
+    width: 18rem;
     padding: 5px;
-    margin-right: 10px !important;
+    margin-top: 15px;
+    margin-right: 20px !important;
+    margin-bottom: 5px;
     border-radius: 2% !important;
 }
 

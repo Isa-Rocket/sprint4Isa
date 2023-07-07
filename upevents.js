@@ -1,8 +1,9 @@
 
 let container = document.getElementById("containerCards")
 console.log(container)
+let arrayEvents = data.events
 
-
+const currentDate = data.currentDate
 
 function crearMaqueta (objeto){
     return ` <div class="card">
@@ -15,17 +16,21 @@ function crearMaqueta (objeto){
     <div class="card-footer">
         <small class="text-body-secondary d-flex justify-content-between">
             <h4>$${objeto.price}</h4>
-            <a class="btn btn-primary" href="./details.html">See more</a>
+            <button>Details</button>
+            <a href="./details.html"></a>
         </small>
     </div>
     `
-
 }
 
+function mostrarMaqueta(array, date){
 
-function mostrarMaqueta(){
-    for(let card of data.events){
-        container.innerHTML += crearMaqueta(card)}
+    for(let card of array){
+        
+        if (date < card.date){
+            container.innerHTML += crearMaqueta(card)
+        }
     }
+}
 
-mostrarMaqueta()    
+mostrarMaqueta(arrayEvents, currentDate)    
