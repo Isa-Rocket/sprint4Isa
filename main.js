@@ -7,6 +7,7 @@ const elSearch = document.getElementById('search')
 
 //fetch
 let eventos;
+let events;
 
 fetch("https://mindhub-xj03.onrender.com/api/amazing")
     .then(res => res.json())
@@ -15,28 +16,27 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
         let categorias = eventos.map(eventos => eventos.category)
         let categoriasSinrepetir = new Set(categorias)
         let categoriasUnicas = Array.from(categoriasSinrepetir)
+        console.log(categoriasUnicas)
         mostrarMaqueta(eventos)
         mostrarCheckbox(categoriasUnicas, containerCheckbox)
+        containerCheckbox.addEventListener("change", function (e) {
+            let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+            let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value)
+            let filteredEvents = eventos.filter(evento => checkedCategories.includes(evento.category))
+            mostrarMaqueta(filteredEvents)
+        })
+        elSearch.addEventListener('keyup', () => {
+            filtrarEventos();
+        })
+        containerCheckbox.addEventListener("change", function (e) {
+            filtrarEventos();
+        })
     })
     .catch(error => console.log(error))
 
 
 //eventos
-containerCheckbox.addEventListener("change", function (e) {
-    let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
-    let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value)
-    let filteredEvents = eventos.filter(evento => checkedCategories.includes(evento.category))
-    mostrarMaqueta(filteredEvents)
-})
-elSearch.addEventListener('keyup', () => {
-    filtrarEventos();
-})
-containerCheckbox.addEventListener("change", function (e) {
-    filtrarEventos();
-})
-inputBusqueda.addEventListener('keyup', () => {
-    filtrarEventos();
-})
+
 
 //funciones
 function crearMaqueta(objeto) {
