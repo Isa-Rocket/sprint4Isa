@@ -3,7 +3,7 @@ let divContenedor = document.getElementById("contenedor")
 let inputBusqueda = document.getElementById("search")
 const container = document.getElementById("containerCards")
 const containerCheckbox = document.getElementById("contenedor-checkbox")
-const elSearch = document.getElementById('search')
+const elSearch = document.getElementById('ventanita-search')
 
 //fetch
 let eventos;

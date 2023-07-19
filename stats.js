@@ -20,16 +20,17 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
 
 //funciones
 function calcularEstadisticas(eventos) {
-    let eventoConMayorAsistencia = eventos.slice().sort((a, b) => (b.assistance / b.capacity) - (a.assistance / a.capacity))[0];
-    let eventoConMenorAsistencia = eventos.slice().sort((a, b) => (a.assistance / a.capacity) - (b.assistance / b.capacity))[0];
-    let eventoConMayorCapacidad = eventos.slice().sort((a, b) => b.capacity - a.capacity)[0];
-    
+    let eventoConMayorAsistencia = eventos.sort((a, b) => (b.assistance / b.capacity) - (a.assistance / a.capacity))[0];
+    let eventoConMenorAsistencia = eventos.sort((a, b) => (a.assistance / a.capacity) - (b.assistance / b.capacity))[0];
+    let eventoConMayorCapacidad = eventos.sort((a, b) => b.capacity - a.capacity)[0];
+
     return {
         eventoConMayorAsistencia,
         eventoConMenorAsistencia,
         eventoConMayorCapacidad
     };
 }
+
 
 function calcularEstadisticasPorCategoria(eventos) {
     let categorias = [...new Set(eventos.map(evento => evento.category))];
