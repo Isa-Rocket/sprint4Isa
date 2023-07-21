@@ -1,15 +1,17 @@
 //referencias
 let divContenedor = document.getElementById("contenedor")
-// let inputBusqueda = document.getElementById("search")
+let inputBusqueda = document.getElementById("search")
 const container = document.getElementById("containerCards")
 const containerCheckbox = document.getElementById("contenedor-checkbox")
-const elSearch = document.getElementById("ventanita-search")
+const elSearch = document.getElementById("el-search")
+const resultados = document.getElementById("containerCards");
 
-//fetch
+//declaraciones
 let eventos;
 let events;
-let pastEvents
+let pastEvents;
 
+//fetch
 fetch("https://mindhub-xj03.onrender.com/api/amazing")
     .then(res => res.json())
     .then(data => {
@@ -21,26 +23,28 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
         let categoriasUnicas = Array.from(categoriasSinrepetir)
         mostrarMaqueta(pastEvents)
         mostrarCheckbox(categoriasUnicas, containerCheckbox)
+        containerCheckbox.addEventListener("change", function (e) {
+            let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+            let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value)
+            let filteredEvents = eventos.filter(evento => checkedCategories.includes(evento.category))
+            mostrarMaqueta(filteredEvents)
+        })
+        elSearch.addEventListener('keyup', () => {
+            filtrarPorBusqueda(eventos);
+        })
+        containerCheckbox.addEventListener("change", function (e) {
+            filtrarEventos();
+        })
     })
     .catch(error => console.log(error))
 
 
 //eventos
-containerCheckbox.addEventListener("change", function (e) {
-    let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
-    let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value)
-    let filteredEvents = eventos.filter(evento => checkedCategories.includes(evento.category))
-    mostrarMaqueta(filteredEvents)
-})
-elSearch.addEventListener('keyup', () => {
-    filtrarEventos(pastEvents, elSearch.value );
-})
-containerCheckbox.addEventListener("change", function (e) {
-    filtrarEventos();
-})
-// inputBusqueda.addEventListener('keyup', () => {
-//     filtrarEventos();
-// })
+elSearch.addEventListener("input", function () {
+    let eventosFiltrados = filtrarPorBusqueda(eventos);
+    mostrarEventos(eventosFiltrados);
+});
+
 
 //funciones
 function crearMaqueta(objeto) {
@@ -78,31 +82,35 @@ function mostrarCheckbox(array, donde) {
         donde.innerHTML += crearCheckbox(elemento)
     }
 }
-function filtrarPorBusqueda(eventosFiltrados, texto) {
+function filtrarPorBusqueda(eventosFiltrados) {
     let valorBusqueda = elSearch.value.toLowerCase();
     let eventosFiltradosPorBusqueda = eventosFiltrados.filter(function (evento) {
-        let coincidenciaNombre = evento.name.toLowerCase().search(texto) !== -1;
-        let coincidenciaDescripcion = evento.description.toLowerCase().search(texto) !== -1;
+        let coincidenciaNombre = evento.name.toLowerCase().search(valorBusqueda) !== -1;
+        let coincidenciaDescripcion = evento.description.toLowerCase().search(valorBusqueda) !== -1;
         return coincidenciaNombre || coincidenciaDescripcion;
     });
-    
+
     return eventosFiltradosPorBusqueda;
 }
 function filtrarPorCategoria(eventosFiltrados) {
     let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
     let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value)
-    console.log(checkedCategories)
     let filteredEvents = eventosFiltrados.filter(evento => checkedCategories.includes(evento.category))
     return filteredEvents;
 }
-function filtrarEventos(array, texto) {
-    let eventosFiltradosPorCategoria = filtrarPorCategoria(array);
-    let eventosFiltradosPorBusquedaYCategoria = filtrarPorBusqueda(eventosFiltradosPorCategoria, texto);
+function filtrarEventos() {
+    let eventosFiltradosPorCategoria = filtrarPorCategoria(eventos);
+    let eventosFiltradosPorBusquedaYCategoria = filtrarPorBusqueda(eventosFiltradosPorCategoria);
 
     if (eventosFiltradosPorBusquedaYCategoria.length === 0) {
         container.innerHTML = "Categoría no encontrada";
     } else {
         mostrarMaqueta(eventosFiltradosPorBusquedaYCategoria);
     }
-    return eventosFiltradosPorBusquedaYCategoria
+}
+function mostrarEventos(eventos) {
+    resultados.innerHTML = "";
+    for (let card of eventos) {
+        container.innerHTML += crearMaqueta(card)
+    };
 }

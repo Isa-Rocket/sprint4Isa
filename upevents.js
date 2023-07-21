@@ -3,12 +3,14 @@ let divContenedor = document.getElementById("contenedor")
 let inputBusqueda = document.getElementById("search")
 const container = document.getElementById("containerCards")
 const containerCheckbox = document.getElementById("contenedor-checkbox")
-const elSearch = document.getElementById('search')
+const elSearch = document.getElementById("el-search")
+const resultados = document.getElementById("containerCards");
 
-//fetch
+//declaraciones
 let eventos;
 let events;
 
+//fetch
 fetch("https://mindhub-xj03.onrender.com/api/amazing")
     .then(res => res.json())
     .then(data => {
@@ -20,26 +22,26 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
         let categoriasUnicas = Array.from(categoriasSinrepetir)
         mostrarMaqueta(upEvents)
         mostrarCheckbox(categoriasUnicas, containerCheckbox)
+        containerCheckbox.addEventListener("change", function (e) {
+            let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
+            let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value)
+            let filteredEvents = eventos.filter(evento => checkedCategories.includes(evento.category))
+            mostrarMaqueta(filteredEvents)
+        })
+        elSearch.addEventListener('keyup', () => {
+            filtrarPorBusqueda(eventos);
+        })
+        containerCheckbox.addEventListener("change", function (e) {
+            filtrarEventos();
+        })
     })
     .catch(error => console.log(error))
-
-
+    
 //eventos
-containerCheckbox.addEventListener("change", function (e) {
-    let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
-    let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value)
-    let filteredEvents = eventos.filter(evento => checkedCategories.includes(evento.category))
-    mostrarMaqueta(filteredEvents)
-})
-elSearch.addEventListener('keyup', () => {
-    filtrarEventos();
-})
-containerCheckbox.addEventListener("change", function (e) {
-    filtrarEventos();
-})
-inputBusqueda.addEventListener('keyup', () => {
-    filtrarEventos();
-})
+elSearch.addEventListener("input", function () {
+    let eventosFiltrados = filtrarPorBusqueda(eventos);
+    mostrarEventos(eventosFiltrados);
+});
 
 //funciones
 function crearMaqueta(objeto) {
@@ -102,4 +104,10 @@ function filtrarEventos() {
     } else {
         mostrarMaqueta(eventosFiltradosPorBusquedaYCategoria);
     }
+}
+function mostrarEventos(eventos) {
+    resultados.innerHTML = "";
+    for (let card of eventos) {
+        container.innerHTML += crearMaqueta(card)
+    };
 }
