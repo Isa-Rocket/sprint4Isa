@@ -3,12 +3,14 @@ let divContenedor = document.getElementById("contenedor")
 let inputBusqueda = document.getElementById("search")
 const container = document.getElementById("containerCards")
 const containerCheckbox = document.getElementById("contenedor-checkbox")
-const elSearch = document.getElementById('ventanita-search')
+const elSearch = document.getElementById("el-search")
+const resultados = document.getElementById("containerCards");
 
-//fetch
+//declaraciones
 let eventos;
 let events;
 
+//fetch 
 fetch("https://mindhub-xj03.onrender.com/api/amazing")
     .then(res => res.json())
     .then(data => {
@@ -26,7 +28,7 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
             mostrarMaqueta(filteredEvents)
         })
         elSearch.addEventListener('keyup', () => {
-            filtrarEventos();
+            filtrarPorBusqueda(eventos);
         })
         containerCheckbox.addEventListener("change", function (e) {
             filtrarEventos();
@@ -34,11 +36,29 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
     })
     .catch(error => console.log(error))
 
-
-//eventos
-
+//event listener
+elSearch.addEventListener("input", function () {
+    let eventosFiltrados = filtrarPorBusqueda(eventos);
+    mostrarEventos(eventosFiltrados);
+});
 
 //funciones
+function filtrarPorBusqueda(eventosFiltrados) {
+    let valorBusqueda = elSearch.value.toLowerCase();
+    let eventosFiltradosPorBusqueda = eventosFiltrados.filter(function (evento) {
+        let coincidenciaNombre = evento.name.toLowerCase().startsWith(valorBusqueda);
+        let coincidenciaDescripcion = evento.description.toLowerCase().startsWith(valorBusqueda);
+        return coincidenciaNombre || coincidenciaDescripcion;
+    });
+
+    return eventosFiltradosPorBusqueda;
+}
+function mostrarEventos(eventos) {
+    resultados.innerHTML = "";
+    for (let card of eventos) {
+        container.innerHTML += crearMaqueta(card)
+    };
+}
 function crearMaqueta(objeto) {
     return ` 
     <div class="card">
@@ -61,6 +81,13 @@ function mostrarMaqueta(eventos) {
         container.innerHTML += crearMaqueta(card)
     }
 }
+function filtrarEventos() {
+        let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"));
+        let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value);
+        let filteredEvents = eventos.filter(evento => checkedCategories.includes(evento.category));
+        mostrarMaqueta(filteredEvents);
+} 
+
 function crearCheckbox(categoria) {
     return `
     <label for = ${categoria}>${categoria}</label>
@@ -74,29 +101,9 @@ function mostrarCheckbox(array, donde) {
         donde.innerHTML += crearCheckbox(elemento)
     }
 }
-function filtrarPorBusqueda(eventosFiltrados) {
-    let valorBusqueda = elSearch.value.toLowerCase();
-    let eventosFiltradosPorBusqueda = eventosFiltrados.filter(function (evento) {
-        let coincidenciaNombre = evento.name.toLowerCase().search(valorBusqueda) !== -1;
-        let coincidenciaDescripcion = evento.description.toLowerCase().search(valorBusqueda) !== -1;
-        return coincidenciaNombre || coincidenciaDescripcion;
-    });
-
-    return eventosFiltradosPorBusqueda;
-}
 function filtrarPorCategoria(eventosFiltrados) {
     let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
     let checkedCategories = checkedCheckboxes.map(checkbox => checkbox.value)
     let filteredEvents = eventosFiltrados.filter(evento => checkedCategories.includes(evento.category))
     return filteredEvents;
-}
-function filtrarEventos() {
-    let eventosFiltradosPorCategoria = filtrarPorCategoria(eventos);
-    let eventosFiltradosPorBusquedaYCategoria = filtrarPorBusqueda(eventosFiltradosPorCategoria);
-
-    if (eventosFiltradosPorBusquedaYCategoria.length === 0) {
-        container.innerHTML = "Categoría no encontrada";
-    } else {
-        mostrarMaqueta(eventosFiltradosPorBusquedaYCategoria);
-    }
 }
