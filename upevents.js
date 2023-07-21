@@ -44,6 +44,11 @@ elSearch.addEventListener("input", function () {
 });
 
 //funciones
+// import { funcion1, funcion2 } from './modules.js';
+
+// funcion1();
+// funcion2();
+
 function crearMaqueta(objeto) {
     return ` 
     <div class="card">

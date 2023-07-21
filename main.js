@@ -19,7 +19,7 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
         let categoriasSinrepetir = new Set(categorias)
         let categoriasUnicas = Array.from(categoriasSinrepetir)
         console.log(categoriasUnicas)
-        mostrarMaqueta(eventos)
+        mostrarMaqueta(eventos) 
         mostrarCheckbox(categoriasUnicas, containerCheckbox)
         containerCheckbox.addEventListener("change", function (e) {
             let checkedCheckboxes = Array.from(document.querySelectorAll("input[type='checkbox']:checked"))
@@ -87,7 +87,6 @@ function filtrarEventos() {
         let filteredEvents = eventos.filter(evento => checkedCategories.includes(evento.category));
         mostrarMaqueta(filteredEvents);
 } 
-
 function crearCheckbox(categoria) {
     return `
     <label for = ${categoria}>${categoria}</label>

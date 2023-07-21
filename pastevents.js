@@ -38,13 +38,11 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
     })
     .catch(error => console.log(error))
 
-
 //eventos
 elSearch.addEventListener("input", function () {
     let eventosFiltrados = filtrarPorBusqueda(eventos);
     mostrarEventos(eventosFiltrados);
 });
-
 
 //funciones
 function crearMaqueta(objeto) {
