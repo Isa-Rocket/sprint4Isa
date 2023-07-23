@@ -1,73 +1,75 @@
+//referencias
 const parametro = location.search
+console.log(parametro)
+
+let url = new URLSearchParams(parametro);
+console.log(url)
+
+let idUrl = url.get('parametro');
+console.log(idUrl)
+console.log('Valor del parámetro:', idUrl);
 
 let carta = document.getElementById("detailsCard")
-let url = new URLSearchParams(parametro)
-let idUrl = url.get('parametro')
 
-let = eventosApi
-
+// fetch
 fetch("https://mindhub-xj03.onrender.com/api/amazing")
-.then (convertidor => convertidor.json())
-.then (informacion => { eventosApi = informacion.events
+  .then(convertidor => convertidor.json())
+  .then(data => {
+    console.log('Datos recibidos de la API:', data);
 
-let finder = eventosApi.events.find(informacion => informacion._id === idUrl)
+    if (data && data.events) {
+      const eventsID = data.events.map(event => event._id);
+      console.log('eventsID:', eventsID);
 
-function crearCartaDeDetalles (cartaArmada, objetoId){
-    cartaArmada.innerHTML += 
-    `<div class="card mb-3" style="max-width: 540px;">
-    <div class="row g-0">
-    <div class="col-md-4">
-        <img src="${objetoId.image}" class="img-fluid rounded-start" alt="...">
-    </div>
-    <div class="col-md-8">
-    <div class="card-body">
-        <h1 class="card-title">${objetoId.name}</h1>
-        <p class="card-text">${objetoId.description}</p>
-        <p class="card-text"><small class="text-body-secondary">Date: ${objetoId.date}</small></p>
-        <p class="card-text"><small class="text-body-secondary">Place: ${objetoId.place}</small></p>
-        <p class="card-text"><small class="text-body-secondary">Capacity: ${objetoId.capacity}</small></p>
-        <p class="card-text"><small class="text-body-secondary">Assistance: ${objetoId.assistance}</small></p>
-        <p class="card-text"><small class="text-body-secondary">Price: ${objetoId.price}</small></p>
-    </div>
-    </div>
-</div>
-</div>`
-}
-crearCartaDeDetalles(carta, finder)})
+      const matchingID = eventsID.find(id => id == idUrl);
+      console.log('matchingID:', matchingID);
 
+      const matchingEvent = data.events.find(event => event._id === matchingID);
+      console.log('matchingEvent:', matchingEvent);
+      console.log('Nombre del evento:', matchingEvent.name);
 
-
-
-
-
-let container = document.getElementById("containerCards")
-console.log(container)
-
-
-
-function crearMaqueta (objeto){
-    return ` <div class="card">
-    <img src=${objeto.image}>
-    <div class="card-body">
-        <div class="card-body">
-            <h5 class="card-title">${objeto.name}</h5>
-            <p class="card-text">${objeto.date}
-                ${objeto.description} 
-                "category": "Book Exchange",
-                "place": "Room D1",
-                "capacity": 150000,
-                "assistance":123286,
-                "price": 1</p>
-            <a href="./index.html" class="btn btn-primary">Go back</a>
-        </div>
-    </div>
-    `
-}
-
-
-function mostrarMaqueta(){
-    for(let card of data.events){
-        container.innerHTML = crearMaqueta(card)}
+      // Llama a la función crearCartaDeDetalles aquí
+      const cartaArmada = document.querySelector('#detailsCard');
+      crearCartaDeDetalles(cartaArmada, matchingEvent);
+    } else {
+      console.log('Error: data or data.events is undefined');
     }
+  })
+  .catch(error => {
+    console.error(error);
+  });
 
-mostrarMaqueta()    
+// funciones
+function crearCartaDeDetalles (cartaArmada, objetoId){
+    console.log('Función crearCartaDeDetalles ejecutada');
+    cartaArmada.innerHTML += 
+    `
+    <div class="container">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="bg-white rounded p-3">
+        <img src="${objetoId.image}" class="img-fluid rounded-start w-100" alt="">
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="bg-white rounded p-3">
+      <div class="card-body text-black">
+      <h1 class="card-title">${objetoId.name}</h1>
+      <p class="card-text" style="font-size: large;">${objetoId.description}</p>
+      <div class="card-body text-black" style="text-align: center;">
+        <ul style="font-size: large; text-align: left;">
+          <li><small class="text-body-secondary">Date: ${objetoId.date}</small></li>
+          <li><small class="text-body-secondary">Place: ${objetoId.place}</small></li>
+          <li><small class="text-body-secondary">Capacity: ${objetoId.capacity}</small></li>
+          <li><small class="text-body-secondary">Assistance: ${objetoId.assistance}</small></li>
+          <li><small class="text-body-secondary">Price: ${objetoId.price}</small></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+  `;
+}
